@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using HomeApi.Contracts.Models.Rooms;
+using System.Linq;
 
 namespace HomeApi.Contracts.Validation
 {
@@ -11,9 +12,14 @@ namespace HomeApi.Contracts.Validation
         public AddRoomRequestValidator() 
         {
             RuleFor(x => x.Area).NotEmpty(); 
-            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty().Must(BeSupported).WithMessage($"Please choose one of the following locations: {string.Join(", ", Values.ValidRooms)}");
             RuleFor(x => x.Voltage).NotEmpty();
-            RuleFor(x => x.GasConnected).NotEmpty();
+            RuleFor(x => x.GasConnected).NotNull();
+        }
+        private bool BeSupported(string location)
+        {
+            // Проверим, содержится ли значение в списке допустимых
+            return Values.ValidRooms.Any(e => e == location);
         }
     }
 }

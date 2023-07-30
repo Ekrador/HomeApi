@@ -75,6 +75,7 @@ namespace HomeApi.Data.Repos
             // Привязываем новое устройство к соответствующей комнате перед сохранением
             device.RoomId = room.Id;
             device.Room = room;
+            device.Location = room.Name;
 
             // Если в запрос переданы параметры для обновления - проверяем их на null
             // И если нужно - обновляем устройство
